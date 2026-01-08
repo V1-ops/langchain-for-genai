@@ -1,3 +1,13 @@
+# Purely hugging face implementation of chat model inference
+'''
+Provider: Hugging Face
+
+API: Hugging Face Inference API
+
+Model: Qwen 2.5 (72B Instruct)
+
+Abstraction:  No LangChain
+'''
 from huggingface_hub import InferenceClient
 from dotenv import load_dotenv
 import os
