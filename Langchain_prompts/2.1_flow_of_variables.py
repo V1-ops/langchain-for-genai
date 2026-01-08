@@ -1,9 +1,10 @@
+"""
 ┌─────────────────────────────────────────────────────────────┐
 │                    STEP 1: DEFINE TEMPLATE                  │
 ├─────────────────────────────────────────────────────────────┤
 │                                                              │
 │  template = PromptTemplate(                                 │
-│      template="""...{paper_input}...{style_input}...""",   │
+│      template=...{paper_input}...{style_input}...,   │
 │      input_variables=["paper_input", "style_input", ...]   │
 │  )                                                          │
 │                                                              │
@@ -76,3 +77,4 @@
 │  ✅ Display with: st.write(result.content)                  │
 │                                                              │
 └─────────────────────────────────────────────────────────────┘
+"""
