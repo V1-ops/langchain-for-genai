@@ -1,0 +1,14 @@
+# Mark Python as the primary language
+*.py linguist-detectable=true
+*.ipynb linguist-detectable=true
+
+# Exclude documentation files from language stats
+*.roff linguist-documentation
+*.1 linguist-documentation
+*.md linguist-documentation
+
+# Mark these as vendored/generated (won't count in stats)
+venv/** linguist-vendored
+Lib/** linguist-vendored
+lib/** linguist-vendored
+*.json linguist-generated=false
