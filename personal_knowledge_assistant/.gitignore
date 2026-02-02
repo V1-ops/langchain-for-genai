@@ -1,0 +1,100 @@
+# Environment variables and secrets
+.env
+.env.local
+.env.*.local
+
+# API Keys and credentials
+*.key
+*.pem
+*.ppk
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Streamlit
+.streamlit/
+.streamlit_cache/
+.streamlit_cache2/
+
+# Data and uploads
+temp_uploads/
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# Vector database (can be regenerated)
+vectorstore/
+!vectorstore/.gitkeep
+
+# Logs
+logs/
+*.log
+*.log.*
+
+# ChromaDB
+*.sqlite3
+*.chroma/
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+# IDE configuration
+.vscode/settings.json
+.vscode/launch.json
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Type checking
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Node modules (if any)
+node_modules/
+npm-debug.log
+
+# Temporary files
+*.tmp
+*.bak
+*.temp
