@@ -118,30 +118,32 @@ CHROMA_PERSIST_DIRECTORY = str(CHROMA_DB_PATH)
 # =============================================================================
 # Settings for splitting documents into chunks
 
-CHUNK_SIZE = 500
+CHUNK_SIZE = 800
 """
 How many characters per chunk.
 
-Why 500?
-- Too small (100): Too many chunks, loses context
-- Just right (500): Good balance of context & specificity
+Why 800?
+- Too small (100-300): Too many chunks, loses context, INCONSISTENT
+- Too small (500): Might break mid-sentence
+- Just right (800): Good balance of context & specificity, BETTER consistency
 - Too large (2000): Too much text, less relevant results
 
-Rule of thumb: 300-1000 depending on your content
+Rule of thumb: 500-1000 depending on your content. Larger = more context = more consistent.
 """
-
-CHUNK_OVERLAP = 50
+150
 """
 How many characters to overlap between chunks.
 
 Example:
-Chunk 1: [0-500]
-Chunk 2: [450-950] <- 50 character overlap
-Chunk 3: [900-1400]
+Chunk 1: [0-800]
+Chunk 2: [650-1450] <- 150 character overlap
+Chunk 3: [1300-2100]
 
 Why overlap?
 - Prevents important info from being at chunk boundaries
 - Ensures context continuity
+- Larger overlap = more consistent results
+- Typical range: 50-200 characters for better consistency
 - Typical range: 20-100 characters
 """
 
@@ -169,33 +171,33 @@ Options:
 # =============================================================================
 # Settings for searching and retrieving documents
 
-RETRIEVAL_K = 3
+RETRIEVAL_K = 5
 """
 How many documents to retrieve for each query.
 
-Why 3?
-- Too few (1): Might miss relevant info
-- Just right (3): Good balance of relevance & brevity
+Why 5?
+- Too few (1-3): Might miss relevant info, INCONSISTENT results
+- Just right (5): Better coverage, more consistent accuracy
 - Too many (10): Overwhelms LLM with too much text
 
 Adjust based on your needs:
-- Quick answers: k=1 or k=2
-- Comprehensive: k=5 or k=6
+- Quick answers: k=3
+- Comprehensive & CONSISTENT: k=5 or k=6
 """
 
-RETRIEVAL_METHOD = "similarity"
+RETRIEVAL_METHOD = "mmr"
 """
 How to retrieve documents.
 
 Options:
-1. "similarity" (RECOMMENDED)
+1. "similarity"
    - Find most similar chunks
-   - Fast and effective
+   - Fast but can return redundant results
    
-2. "mmr" (Maximal Marginal Relevance)
+2. "mmr" (Maximal Marginal Relevance) (RECOMMENDED FOR ACCURACY)
    - Balances relevance + diversity
    - Avoids redundant results
-   - Slower but better quality
+   - Better quality and more diverse context
 """
 
 RETRIEVAL_SCORE_THRESHOLD = 0.5
@@ -258,10 +260,11 @@ Default: https://api-inference.huggingface.co/models
 """
 
 # LLM PARAMETERS
-LLM_TEMPERATURE = 0.3
+LLM_TEMPERATURE = 0.1
 """
 Temperature for LLM generation (0.0 to 1.0).
 - 0.0: Deterministic, always same output
+- 0.1: Very low (maximum consistency) - BEST for accurate Q&A
 - 0.3: Lower (more focused, less random) - Good for Q&A
 - 0.7: Higher (more creative, more random) - Good for brainstorming
 """
@@ -390,8 +393,8 @@ USE_GPU_FOR_EMBEDDINGS = False
 ENABLE_METADATA_FILTERING = True
 """Allow filtering by metadata (e.g., filename, date)"""
 
-ENABLE_RERANKING = False
-"""Use reranking for better results (slower but more accurate)"""
+ENABLE_RERANKING = True
+"""Use reranking for better results (slower but MUCH more accurate & consistent)"""
 
 RERANKER_MODEL = "cross-encoder/ms-marco-MiniLM-L-12-v2"
 """Reranker model for improved relevance (if ENABLE_RERANKING=True)"""

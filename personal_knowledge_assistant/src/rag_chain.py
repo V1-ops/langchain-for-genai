@@ -15,7 +15,11 @@ from config import (
     HF_MODEL_FOR_QA,
     HF_ENDPOINT_URL,
     LLM_TEMPERATURE,
-    LLM_MAX_NEW_TOKENS
+    LLM_MAX_NEW_TOKENS,
+    RETRIEVAL_K,
+    RETRIEVAL_METHOD,
+    ENABLE_RERANKING,
+    RERANKER_MODEL
 )
 from src.embeddings_manager import embeddings
 from src.utils import logger
@@ -32,7 +36,14 @@ def create_rag_chain():
         persist_directory=str(CHROMA_PATH),
         embedding_function=embeddings
     )
-    retriever = vector_store.as_retriever(search_kwargs={"k": 7})
+    
+    # Configure retriever with MMR or similarity search
+    search_kwargs = {"k": RETRIEVAL_K}
+    if RETRIEVAL_METHOD == "mmr":
+        search_kwargs["search_type"] = "mmr"
+        search_kwargs["fetch_k"] = RETRIEVAL_K * 2  # Fetch more candidates for MMR
+    
+    retriever = vector_store.as_retriever(search_kwargs=search_kwargs)
     
     # Initialize HuggingFace Endpoint
     try:
@@ -73,10 +84,31 @@ Answer:""")
     def format_docs(docs):
         return "\n\n".join([doc.page_content for doc in docs])
     
+    # Apply reranking if enabled
+    context_chain = retriever | RunnableLambda(format_docs)
+    if ENABLE_RERANKING:
+        try:
+            from langchain_community.document_compressors import CrossEncoderReranker
+            from langchain_community.retrievers import ContextualCompressionRetriever
+            
+            # Add reranker for better relevance filtering
+            compressor = CrossEncoderReranker(model_name=RERANKER_MODEL)
+            context_chain = (
+                retriever 
+                | RunnableLambda(lambda docs: ContextualCompressionRetriever(
+                    base_compressor=compressor,
+                    base_retriever=retriever
+                ).compress_documents(docs, ""))
+                | RunnableLambda(format_docs)
+            )
+            logger.info(f"✓ Reranking enabled with {RERANKER_MODEL}")
+        except Exception as e:
+            logger.warning(f"Could not load reranker: {e}. Using standard retrieval.")
+    
     # Create RAG chain
     rag_chain = (
         RunnableParallel(
-            context=retriever | RunnableLambda(format_docs),
+            context=context_chain,
             question=RunnablePassthrough()
         )
         | prompt

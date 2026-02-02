@@ -34,7 +34,13 @@ logger = setup_logging()
 # =============================================================================
 
 def clean_text(text: str) -> str:
-    """Clean and normalize text."""
-    text = " ".join(text.split())
+    """Clean and normalize text while preserving structure."""
+    # Remove invalid characters FIRST
     text = text.replace("\x00", "").replace("\ufffd", "")
+    
+    # Preserve paragraph breaks by normalizing line-by-line
+    lines = [" ".join(line.split()) for line in text.split("\n")]
+    text = "\n".join(line for line in lines if line.strip())
+    
+    # Final normalization
     return text.strip()
