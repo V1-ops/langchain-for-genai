@@ -87,8 +87,6 @@ Answer:""")
     )
     
     return rag_chain
-
-
 def answer_question(question: str):
     """Ask a question and get answer.
     

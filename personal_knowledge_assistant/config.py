@@ -242,21 +242,14 @@ if not HF_API_KEY:
     print("   You can still use retrieval without it.")
     print("   For LLM features with ChatHuggingFace, add: HF_TOKEN=your_key_here to .env file")
 
-HF_MODEL_FOR_QA = "mistralai/Mistral-7B-v0.2"
+HF_MODEL_FOR_QA = "mistralai/Mistral-7B-Instruct-v0.1"
 """
 Which HuggingFace model to use for question answering with ChatHuggingFace.
 
-Using Qwen2.5-72B-Instruct for excellent conversational abilities (2026)
+Using Mistral-7B-Instruct-v0.1 (reliable, publicly available)
 Alternatives:
-- mistralai/Mistral-7B-Instruct-v0.2 (lighter, faster)
-- google/flan-t5-xxl (good quality)
-"""
-
-HF_ENDPOINT_URL = "https://api-inference.huggingface.co/models"
-"""
-HuggingFace Inference Endpoint URL.
-Used by ChatHuggingFace for API communication.
-Default: https://api-inference.huggingface.co/models
+- google/flan-t5-xxl (lighter)
+- meta-llama/Llama-2-7b-chat-hf (if you have access)
 """
 
 # LLM PARAMETERS
