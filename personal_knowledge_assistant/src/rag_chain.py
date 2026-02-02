@@ -113,14 +113,32 @@ def answer_question(question: str):
         logger.info(f"Invoking with question: {question}")
         answer = rag_chain.invoke(question)
         
-        # Extract content if answer is an object with .content attribute
-        if hasattr(answer, 'content'):
-            logger.info("Answer extracted from content attribute")
-            return answer.content
+        logger.info(f"Answer type: {type(answer)}, value: {answer}")
         
-        result = str(answer).strip()
-        logger.info(f"Answer: {result[:100]}...")
+        # Handle different response types
+        if answer is None:
+            return "No answer generated. Please try again."
+        
+        if hasattr(answer, 'content'):
+            logger.info("Extracting from content attribute")
+            result = answer.content
+        elif isinstance(answer, str):
+            result = answer
+        else:
+            result = str(answer)
+        
+        # Clean up result
+        result = result.strip() if result else "No answer generated"
+        
+        if not result or result.lower() == "answer:":
+            return "Unable to generate a valid answer. The model may not have sufficient context."
+        
+        logger.info(f"Answer generated: {result[:100]}...")
         return result
+        
+    except StopIteration:
+        logger.error("StopIteration: LLM returned empty response")
+        return "Error: LLM returned an empty response. Try a different question or check the documents."
     except Exception as e:
         import traceback
         error_msg = str(e) if str(e) else repr(e)
