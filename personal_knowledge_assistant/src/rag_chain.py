@@ -107,15 +107,23 @@ def answer_question(question: str):
     """
     
     try:
+        logger.info(f"Creating RAG chain...")
         rag_chain = create_rag_chain()
+        
+        logger.info(f"Invoking with question: {question}")
         answer = rag_chain.invoke(question)
         
         # Extract content if answer is an object with .content attribute
         if hasattr(answer, 'content'):
+            logger.info("Answer extracted from content attribute")
             return answer.content
         
-        return str(answer)
+        result = str(answer).strip()
+        logger.info(f"Answer: {result[:100]}...")
+        return result
     except Exception as e:
-        error_msg = str(e)
-        logger.error(f"Error generating answer: {error_msg}")
-        return f"Error: {error_msg}"
+        import traceback
+        error_msg = str(e) if str(e) else repr(e)
+        tb = traceback.format_exc()
+        logger.error(f"Error generating answer: {error_msg}\n{tb}")
+        return f"Error: {error_msg if error_msg else 'Unknown error - check logs'}"
