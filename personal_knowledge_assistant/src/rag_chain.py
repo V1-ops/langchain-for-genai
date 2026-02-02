@@ -30,11 +30,21 @@ CHROMA_PATH = VECTORSTORE_DIR / "chroma"
 def create_rag_chain():
     """Create RAG chain with LLM API for intelligent answers."""
     
+    # Validate API key
+    if not HF_API_KEY:
+        raise ValueError("HF_API_KEY not set. Add HF_TOKEN to your .env file.")
+    
     # Load vector store
     vector_store = Chroma(
         persist_directory=str(CHROMA_PATH),
         embedding_function=embeddings
     )
+    
+    # Check if vector store has documents
+    collection = vector_store._collection
+    doc_count = collection.count()
+    if doc_count == 0:
+        raise ValueError("No documents in vector store. Please upload documents first.")
     
     # Configure retriever with MMR or similarity search
     if RETRIEVAL_METHOD == "mmr":
@@ -86,7 +96,9 @@ Answer:""")
         | llm
     )
     
+    logger.info(f"✓ RAG chain created with {doc_count} documents")
     return rag_chain
+
 def answer_question(question: str):
     """Ask a question and get answer.
     
@@ -94,11 +106,16 @@ def answer_question(question: str):
         question: The question to answer
     """
     
-    rag_chain = create_rag_chain()
-    answer = rag_chain.invoke(question)
-    
-    # Extract content if answer is an object with .content attribute
-    if hasattr(answer, 'content'):
-        return answer.content
-    
-    return str(answer)
+    try:
+        rag_chain = create_rag_chain()
+        answer = rag_chain.invoke(question)
+        
+        # Extract content if answer is an object with .content attribute
+        if hasattr(answer, 'content'):
+            return answer.content
+        
+        return str(answer)
+    except Exception as e:
+        error_msg = str(e)
+        logger.error(f"Error generating answer: {error_msg}")
+        return f"Error: {error_msg}"
