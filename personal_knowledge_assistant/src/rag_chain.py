@@ -42,12 +42,15 @@ def create_rag_chain():
     )
     
     # Configure retriever with MMR or similarity search
-    search_kwargs = {"k": RETRIEVAL_K}
     if RETRIEVAL_METHOD == "mmr":
-        search_kwargs["search_type"] = "mmr"
-        search_kwargs["fetch_k"] = RETRIEVAL_K * 2  # Fetch more candidates for MMR
-    
-    retriever = vector_store.as_retriever(search_kwargs=search_kwargs)
+        retriever = vector_store.as_retriever(
+            search_type="mmr",
+            search_kwargs={"k": RETRIEVAL_K, "fetch_k": RETRIEVAL_K * 2}
+        )
+    else:
+        retriever = vector_store.as_retriever(
+            search_kwargs={"k": RETRIEVAL_K}
+        )
     
     # Initialize HuggingFace Endpoint
     try:
