@@ -5,11 +5,11 @@ Streamlit Web UI - Upload documents and chat with them
 import sys
 from pathlib import Path
 
-# Add current directory to path for imports
-sys.path.insert(0, str(Path(__file__).parent))
+# CRITICAL: Add root directory to path BEFORE any other imports
+root_dir = Path(__file__).parent
+sys.path.insert(0, str(root_dir))
 
 import streamlit as st
-
 from src.document_processor import process_documents
 from src.rag_chain import answer_question
 from langchain_community.vectorstores import Chroma
