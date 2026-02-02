@@ -266,7 +266,7 @@ Temperature for LLM generation (0.0 to 1.0).
 - 0.7: Higher (more creative, more random) - Good for brainstorming
 """
 
-LLM_MAX_NEW_TOKENS = 256
+LLM_MAX_NEW_TOKENS = 500
 """
 Maximum tokens in LLM response.
 Lower = faster responses, Higher = more detailed answers
