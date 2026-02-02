@@ -8,6 +8,9 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import PyPDFLoader, TextLoader, DirectoryLoader
 from langchain_core.documents import Document
 
+import sys
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
 from config import DATA_RAW_DIR, CHUNK_SIZE, CHUNK_OVERLAP
 from src.utils import logger, clean_text
 

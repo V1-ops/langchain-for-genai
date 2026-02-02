@@ -7,6 +7,10 @@ to convert text into vectors for similarity search.
 
 import numpy as np
 from langchain_huggingface import HuggingFaceEmbeddings
+from pathlib import Path
+
+import sys
+sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from config import EMBEDDING_MODEL_NAME
 from src.utils import logger
