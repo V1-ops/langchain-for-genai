@@ -242,13 +242,14 @@ if not HF_API_KEY:
     print("   You can still use retrieval without it.")
     print("   For LLM features with ChatHuggingFace, add: HF_TOKEN=your_key_here to .env file")
 
-HF_MODEL_FOR_QA = "mistralai/Mistral-7B-v0.2"
+HF_MODEL_FOR_QA = "mistralai/Mistral-7B-Instruct-v0.2"
 """
 Which HuggingFace model to use for question answering with ChatHuggingFace.
 
-Using Qwen2.5-72B-Instruct for excellent conversational abilities (2026)
+Using Mistral-7B-Instruct-v0.2 for faster, efficient responses
 Alternatives:
-- mistralai/Mistral-7B-Instruct-v0.2 (lighter, faster)
+- mistralai/Mistral-7B-Instruct-v0.2 (lighter, faster) - CURRENT
+- Qwen/Qwen2.5-72B-Instruct (better quality but slower)
 - google/flan-t5-xxl (good quality)
 """
 
