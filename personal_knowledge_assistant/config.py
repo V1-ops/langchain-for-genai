@@ -130,7 +130,8 @@ Why 800?
 
 Rule of thumb: 500-1000 depending on your content. Larger = more context = more consistent.
 """
-150
+
+CHUNK_OVERLAP = 150
 """
 How many characters to overlap between chunks.
 
@@ -144,7 +145,6 @@ Why overlap?
 - Ensures context continuity
 - Larger overlap = more consistent results
 - Typical range: 50-200 characters for better consistency
-- Typical range: 20-100 characters
 """
 
 TEXT_SPLITTER_TYPE = "recursive"
