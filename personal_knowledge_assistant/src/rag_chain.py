@@ -4,8 +4,8 @@ RAG Chain - Retrieve documents and generate answers using LLM API
 
 from langchain_community.vectorstores import Chroma
 from langchain_core.runnables import RunnablePassthrough, RunnableParallel, RunnableLambda
-from langchain_core.prompts import ChatPromptTemplate
-from langchain_huggingface import ChatHuggingFace, HuggingFaceEndpoint
+from langchain_core.prompts import PromptTemplate
+from langchain_huggingface import HuggingFaceEndpoint
 from pathlib import Path
 import sys
 
@@ -57,23 +57,16 @@ def create_rag_chain():
             search_kwargs={"k": RETRIEVAL_K}
         )
     
-    # Initialize HuggingFace Endpoint
-    endpoint = HuggingFaceEndpoint(
+    # Initialize HuggingFace Endpoint directly (no wrapper)
+    llm = HuggingFaceEndpoint(
         repo_id=HF_MODEL_FOR_QA,
         huggingfacehub_api_token=HF_API_KEY,
         temperature=LLM_TEMPERATURE,
-        max_new_tokens=LLM_MAX_NEW_TOKENS,
-        task="conversational"
-    )
-    
-    # Wrap with ChatHuggingFace for better chat handling
-    llm = ChatHuggingFace(
-        llm=endpoint,
-        temperature=LLM_TEMPERATURE
+        max_new_tokens=LLM_MAX_NEW_TOKENS
     )
     
     # Create prompt template for RAG
-    prompt = ChatPromptTemplate.from_template("""Answer the question based ONLY on the context provided.
+    prompt = PromptTemplate.from_template("""Answer the question based ONLY on the context provided.
 
 Context:
 {context}
