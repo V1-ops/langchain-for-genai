@@ -242,7 +242,7 @@ if not HF_API_KEY:
     print("   You can still use retrieval without it.")
     print("   For LLM features with ChatHuggingFace, add: HF_TOKEN=your_key_here to .env file")
 
-HF_MODEL_FOR_QA = "Qwen/Qwen2.5-72B-Instruct"
+HF_MODEL_FOR_QA = "mistralai/Mistral-7B-v0.2"
 """
 Which HuggingFace model to use for question answering with ChatHuggingFace.
 
@@ -392,12 +392,6 @@ USE_GPU_FOR_EMBEDDINGS = False
 
 ENABLE_METADATA_FILTERING = True
 """Allow filtering by metadata (e.g., filename, date)"""
-
-ENABLE_RERANKING = True
-"""Use reranking for better results (slower but MUCH more accurate & consistent)"""
-
-RERANKER_MODEL = "cross-encoder/ms-marco-MiniLM-L-12-v2"
-"""Reranker model for improved relevance (if ENABLE_RERANKING=True)"""
 
 # =============================================================================
 # SUMMARY: KEY THINGS TO MODIFY
