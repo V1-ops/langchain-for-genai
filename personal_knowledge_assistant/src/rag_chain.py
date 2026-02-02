@@ -32,7 +32,7 @@ def create_rag_chain():
         persist_directory=str(CHROMA_PATH),
         embedding_function=embeddings
     )
-    retriever = vector_store.as_retriever(search_kwargs={"k": 3})
+    retriever = vector_store.as_retriever(search_kwargs={"k": 7})
     
     # Initialize HuggingFace Endpoint
     try:
